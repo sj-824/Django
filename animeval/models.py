@@ -118,6 +118,7 @@ class ProfileModel(models.Model):
     nickname = models.CharField(max_length = 10,verbose_name = 'ニックネーム')
     gender = models.IntegerField(choices = GENDER_CHOICES, blank = True)
     favarite_anime = models.CharField(max_length = 100)
+    avator = models.ImageField(upload_to = 'images/', blank = True)
     
 
     def __str__(self):
