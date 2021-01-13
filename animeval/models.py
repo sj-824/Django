@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import BaseUserManager
+from django_mysql.models import ListCharField
 
 # Create your models here.
 
@@ -126,7 +127,15 @@ class ProfileModel(models.Model):
 
 class AnimeModel(models.Model):
     anime_title = models.CharField(max_length = 100)
-    anime_genre = models.CharField(max_length = 15, default= '0/0/0/0/0/0/0/0')
+    started = models.CharField(max_length = 10,default = 'None')
+    anime_genre = models.CharField(max_length = 15, default='0/0/0/0/0/0/0/0')
+    corporation = models.CharField (max_length = 100,default = 'None')
+    character_voice = ListCharField(
+        base_field = models.CharField(max_length = 20),
+        size = 6,
+        max_length = (6 * 21),
+        default = ['None']
+    )
 
 class ReviewModel(models.Model):
 
