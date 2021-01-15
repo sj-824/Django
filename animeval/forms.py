@@ -39,10 +39,24 @@ class CreateProfile(forms.Form):
     avator = forms.ImageField(required = True)
 
         
-class CreateReview(forms.ModelForm):
-    class Meta:
-        model = models.ReviewModel
-        fields = ('anime_genre',)
+class CreateReview(forms.Form):
+    anime_title = forms.CharField(max_length = 100)
+    review = forms.TextField()
+    eva_senario = forms.IntegerField(
+        validators = [MinValueValidator(1),MaxValueValidator(5)]
+    )
+    eva_drawing = forms.IntegerField(
+        validators = [MinValueValidator(1),MaxValueValidator(5)]
+    )
+    eva_music = forms.IntegerField(
+        validators = [MinValueValidator(1),MaxValueValidator(5)]
+    )
+    eva_character = forms.IntegerField(
+        validators = [MinValueValidator(1),MaxValueValidator(5)]
+    )
+    eva_cv = forms.IntegerField(
+        validators = [MinValueValidator(1),MaxValueValidator(5)]
+    )
 
 class CreateComment(forms.ModelForm):
     class Meta:
@@ -56,6 +70,8 @@ class CreateReply(forms.ModelForm):
 
 class CSVUpload(forms.Form):
     file = forms.FileField(label = 'CSVファイル', help_text = '拡張子CSVのファイルをアップロードしてください')
+
+    
 
 
 

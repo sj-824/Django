@@ -115,7 +115,7 @@ class ProfileModel(models.Model):
         (3,'その他'),
     )
 
-    username = models.ForeignKey(User, on_delete = models.CASCADE,related_name = 'user')
+    user = models.ForeignKey(User, on_delete = models.CASCADE,related_name = 'user')
     nickname = models.CharField(max_length = 10,verbose_name = 'ニックネーム')
     gender = models.IntegerField(choices = GENDER_CHOICES, blank = True)
     favarite_anime = models.CharField(max_length = 100)
@@ -126,9 +126,9 @@ class ProfileModel(models.Model):
         return self.nickname
 
 class AnimeModel(models.Model):
-    anime_title = models.CharField(max_length = 100)
+    title = models.CharField(max_length = 100)
     started = models.CharField(max_length = 10,default = 'None')
-    anime_genre = models.CharField(max_length = 15, default='0/0/0/0/0/0/0/0')
+    genre = models.CharField(max_length = 15, default= 'None')
     corporation = models.CharField (max_length = 100,default = 'None')
     character_voice = ListCharField(
         base_field = models.CharField(max_length = 20),
@@ -136,37 +136,38 @@ class AnimeModel(models.Model):
         max_length = (6 * 21),
         default = ['None']
     )
+    evaluation = ListCharField(
+        base_field = models.IntegerField(),
+        size = 5,
+        default = [0,0,0,0,0],
+    )
+    evaluation_ave = models.DecimalField(max_digits=2, decimal_places=1)
 
 class ReviewModel(models.Model):
-
-    GENRE_CHOICES = (
-        (1,'SF'),
-        (2,'ファンタジー'),
-        (3,'コメディ'),
-        (4,'バトル'),
-        (5,'恋愛'),
-        (6,'スポーツ'),
-        (7,'青春'),
-        (8,'戦争'),
-    )
-
-    username = models.ForeignKey(User, on_delete = models.CASCADE)
-    nickname = models.ForeignKey(ProfileModel, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    profile = models.ForeignKey(ProfileModel, on_delete = models.CASCADE)
     anime_title = models.ForeignKey(AnimeModel, on_delete = models.CASCADE)
-    anime_genre = models.IntegerField(choices = GENRE_CHOICES, blank = True, default = 1)
     review_title = models.CharField(max_length =50)
     review_content = models.TextField()
-    evaluation_value = models.CharField(max_length = 9)
-    evaluation_value_ave = models.DecimalField(max_digits=2, decimal_places=1)
+    evaluation = ListCharField(
+        base_field = models.IntegerField(),
+        size = 5,
+        default = [0,0,0,0,0]
+    )
+    evaluation_ave = models.DecimalField(max_digits=2, decimal_places=1)
     post_date = models.DateTimeField(auto_now_add = True)
 
 class Counter(models.Model):
-    username = models.ForeignKey(User,on_delete=models.CASCADE)
-    genre_counter = models.CharField(max_length = 15, null = True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    counter = ListCharField(
+        base_field = models.IntegerField(),
+        size = 8,
+        default = [0,0,0,0,0,0,0,0]
+    )
 
 class AccessReview(models.Model):
-    access_name = models.ForeignKey(User, on_delete = models.CASCADE)
-    review = models.ForeignKey(ReviewModel, on_delete = models.CASCADE)
+    access_user = models.ForeignKey(User, on_delete = models.CASCADE)
+    access_review = models.ForeignKey(ReviewModel, on_delete = models.CASCADE)
 
     def __str__(self):
         return 'アクセス名:{} / レビュータイトル:{}'.format(self.access_name.username, self.review.review_title)

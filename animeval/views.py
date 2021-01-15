@@ -60,14 +60,18 @@ def create_profile(request):
             favarite_anime = form.cleaned_data['favarite_anime']
             avator = form.cleaned_data['avator']
 
-            profile_model = ProfileModel()
-            profile_model.username = request.user
-            profile_model.nickname = nickname
-            profile_model.gender = gender
-            profile_model.favarite_anime = favarite_anime
-            profile_model.avator = avator
-            profile_model.save()
+            profile_model = ProfileModel(
+                username = request.user,
+                nickname = nickname,
+                gender = gender,
+                favarite_anime = favarite_anime,
+                avator = avator
+            )
+
+            profile_models.save()
+
             return redirect('home')
+
     else:
         form = CreateProfile
     return render(request,'create_profile.html',{'form' : form})
@@ -88,40 +92,50 @@ def home(request):
         all_anime_list = AnimeModel.objects.all().order_by('anime_title')
 
     # おすすめアニメの表示
+
+    # 数字とジャンルを紐付け
+    genre = {
+    1:'SF',
+    2:'ファンタジー',
+    3:'コメディ',
+    4:'バトル',
+    5:'恋愛',
+    6:'スポーツ',
+    7:'青春',
+    8:'戦争',
+}
+
     counter = Counter.objects.get(username = request.user)  
-    genre_counter = counter.genre_counter.split('/')             # 各ジャンルに該当するレビューへのアクセス数をリスト化
-    int_genre_counter = [int(n) for n in genre_counter]          # アクセス数をintへ変換
-    max_genre = int_genre_counter.index(max(int_genre_counter))  # 最もアクセス数の高いジャンルのindexを取得
+    genre_counter = counter.genre_counter
+    genre_top = genre[genre_counter.index(max(genre_counter)) + 1]  # 最もアクセス数の高いジャンルを取得
 
     anime_list = []
-    if AccessReview.objects.filter(access_name = request.user).exists():                              # アニメが登録されている=True
+    if AccessReview.objects.filter(access_name = request.user).exists(): # アニメが登録されている=True
         # 各アニメのジャンルとアクセス数の高いジャンルが一致したアニメをリスト化
-        for animemodel in AnimeModel.objects.all():              
-            anime_genre = animemodel.anime_genre.split('/')
-            if anime_genre[max_genre] == '1':                    
-                anime_list.append(animemodel.anime_title)
-        anime_list = AnimeModel.objects.filter(anime_title__in = anime_list)  
+        for anime in AnimeModel.objects.all():              
+            if anime.anime_genre == genre_top:
+                anime_list.append(anime)
 
-        # アクセスしたアニメの平均レビュー評価
+        # アクセスしたアニメの平均評価
+        
         access_review_list = AccessReview.objects.filter(access_name = request.user).filter(review__anime_title__in = anime_list)  # ジャンルの一致したアニメの内アクセスしたアニメの平均レビュー評価を取得
-        access_anime_title = []
-
-        # アクセスしたレビューのアニメを抽出
-        for access_review in access_review_list:
-            if access_review.review.anime_title not in access_anime_title:  # 同一アニメのレビューを観ている場合、重複を防ぐ
-                access_anime_title.append(access_review.review.anime_title)
+        access_anime_list = []
+        for review in access_review_list
+            anime = review.review.anime_title
+            if not anime in access_anime_list:
+                access_anime_list.append(anime)
 
         # アクセスしたレビューのアニメの平均レビュー評価を抽出
-        for access_anime in access_anime_title:
-            review_match_list= ReviewModel.objects.filter(anime_title = access_anime)
+        for anime in access_anime_title:
+            review_match_list = ReviewModel.objects.filter(anime_title = anime)
             review_values_sum = [0,0,0,0,0]
-            review_values_ave_sum = [0,0,0,0,0]
 
-            for review_match in review_match_list:
-                review_values = review_match.evaluation_value.split('/')
-                int_review_values = [int(n) for n in review_values]
-                review_values_sum = np.array(review_values_sum) + np.array(int_review_values)
+            # 各アニメの平均評価
+            for review in review_match_list:
+                review_values = review.evaluation_value
+                review_values_sum = np.array(review_values_sum) + np.array(review_values)
 
+            # 全てのアニメの平均評価
             review_values_ave = [n/review_match_list.count() for n in review_values_sum]
             review_values_ave_sum = np.array(review_values_ave_sum) + np.array(review_values_ave)
 
@@ -129,6 +143,10 @@ def home(request):
         
         # 各アニメの平均評価
         anime_dict = {}
+        
+        for anime in AnimeModel.objects.all():
+            if not anime in access_anime_list:
+
         for anime in anime_list:
             anime_review_list = ReviewModel.objects.filter(anime_title = anime)
             count = anime_review_list.count()
@@ -202,60 +220,56 @@ def profile(request,pk):
         return render(request, 'profile.html',{'profile' : profile, 'context' : context, 'review_num' : review_num})
 
 def create_review(request):
-    profile = ProfileModel.objects.get(username = request.user)  # profileを取得
+    profile = ProfileModel.objects.get(user = request.user)  # profileを取得
 
     if request.method == 'POST':
         # AnimeModelに投稿したアニメデータを保存
         anime_title = request.POST.get('anime_title')  # 投稿したアニメ名を取得
 
-        # 過去に同じアニメの投稿をしていないか確認
-        past_post = ReviewModel.objects.filter(username = request.user).filter(anime_title__anime_title = anime_title)
-        if past_post.exists():
-            context = '過去にこのアニメについて投稿しています'
-            return render(request, 'create_review.html', {'context' : context, 'profile' : profile})
+        if not AnimeModel.objects.filter(title = anime_title).exsits():  # アニメ一覧に該当アニメがない場合
+            context = {'context' : '未登録もしくは入力したタイトルに間違いがあります。'}
+            return render (request, 'create_review.html', context)
         
-        # form内容の確認
-        form = CreateReview(request.POST)
-        if form.is_valid():
+        elif ReviewModel.objects.filter(user = request.user).filter(anime_title = anime_title).exists():  # すでにレビュー済みのアニメの場合
+            context = {'context' : 'すでにレビュー済みのアニメです'}
+            return render(request, 'create_review.html', context)
+        
+        else:
+            form = CreateReview(request.POST or None)
 
-            anime_genre_idx = int(request.POST.get('anime_genre')) - 1
+            if form.is_valid():
+                # Pythonの型に変換
+                anime_title = cleaned_data['anime_title']
+                review = cleaned_data['review']
+                evaluation = [
+                    cleaned_data['eva_senario'],
+                    cleaned_data['eva_drawing'],
+                    cleaned_data['eva_music'],
+                    cleaned_data['character'],
+                    cleaned_data['cv']
+                ]
 
-            # AnimeModelへの追加
-            if not AnimeModel.objects.filter(anime_title = anime_title).exists():
-                int_anime_genre = [0,0,0,0,0,0,0,0]
-                int_anime_genre[anime_genre_idx] = 1
-                str_anime_genre = [str(n) for n in int_anime_genre]
-                anime_genre = '/'.join(str_anime_genre)
-                AnimeModel.objects.create(anime_title = anime_title, anime_genre = anime_genre)
+                # reviewのタイトルを取得
+                split_review = review.splitlines()
+                review_title = split_review.pop(0)
+                # review_contentの取得
+                if request.POST.get('spoiler') == '1':
+                    split_review.insert(0,'※ネタバレを含む')
+                review_content = '\r\n'.join(split_review)
 
-            else:
-                anime_model = AnimeModel.objects.get (anime_title = anime_title)
-                anime_genre = anime_model.anime_genre.split('/')
-                if anime_genre[anime_genre_idx] == '0':
-                    anime_genre[anime_genre_idx] = '1'
-                anime_model.anime_genre = '/'.join(anime_genre)
-                anime_model.save()
+                # evaluation_aveの取得
+                evaluation_ave = sum(evaluation) / len(evaluation)
 
-            object = form.save(commit = False)  # form内容を保存
-            object.username = request.user  # user名を保存
-            object.nickname = ProfileModel.objects.get(username = request.user)  # ProfileModelを保存
-            object.anime_title = AnimeModel.objects.get(anime_title = anime_title)
-            content_split = request.POST.get('review_content').splitlines()  # レビュー内容を改行ごとにリスト化
-            object.review_title = content_split[0]  # 1行目をレビュータイトルとして保存
-            content_split.pop(0)  # レビュー内容の1行目を削除(タイトルを削除)
-
-            # ネタバレの有無による
-            if request.POST.get('spoiler') == '1':
-                content_split.insert(0,'※ネタバレを含む')  # 1行目にネタバレを含むを挿入
-            
-            object.review_content = '\r\n'.join(content_split)
-            str_values = [request.POST.get('val1'),request.POST.get('val2'),request.POST.get('val3'),request.POST.get('val4'),request.POST.get('val5')]
-            object.evaluation_value = '/'.join(str_values)
-            int_values = [int(n) for n in str_values]
-            object.evaluation_value_ave = sum(int_values)/5
-            object.save()
-            
-
+                # Reviewを作成
+                ReviewModel.objects.create(
+                    user = request.user,
+                    profile = ProfileModel.objects.get(user = request.user),
+                    anime_title = anime_title,
+                    review_title = review_title,
+                    review_content = review_content,
+                    evaluation = evaluation,
+                    evaluation_ave = evaluation_ave,
+                )
         return redirect('home')
 
     else:
