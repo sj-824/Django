@@ -1,0 +1,134 @@
+
+#trend{
+    margin-bottom: 15px;
+    border: solid 1px gray;
+    display: flex;
+    position: relative;
+    height: 320px;
+    overflow-y: auto;
+}
+
+#trend-anime{
+    width: 100%;
+}
+
+#trend-title{
+    width: 100%;
+    height: 30px;
+    z-index:1;
+    margin-bottom: 5px;
+}
+
+#trend-info{
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+}
+
+.trend-info-title{
+    width: 300px;
+    border-bottom: 1px solid aliceblue;
+    text-align: center;
+    margin: 10px;
+}
+
+#trend-detail1{
+    justify-content: space-between;
+    list-style: none;
+    text-align: left;
+    padding: 0;
+}
+
+#trend-detail1 li{
+    width: 100%;
+    overflow-y: auto;
+    margin: 20px 0 20px 30px;
+}
+
+#reviwer-list-info{
+    list-style: none;
+    text-align: center;
+}
+
+#profile-info{
+    display: flex;
+    align-items: center;
+}
+
+#profile-info h6{
+    position: relative;
+    margin-left: 10px;
+    bottom: 15px;
+
+}
+
+#contents{
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+
+#review-list{
+    width: 70%;
+}
+
+#link-list{
+    width: 30%;
+    position: relative;
+    height: 800px;
+}
+
+.link{
+    width: 300px;
+    position: absolute;
+    right: 0%;
+    border: 1px grey solid;
+}
+
+.link-title{
+    background-color: rgb(80, 80, 80);
+    border: grey solid;
+    border-width: 2px 0px 1px 0px;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+#review-item{
+    border : solid 1px gray ;
+    position: relative;
+    padding: 10px;
+    display: flex;
+    align-items: start;
+}
+
+#review-title{
+    display: flex;
+}
+
+#review-title h4{
+    margin-right: 20px;
+}
+
+#icon{
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+}
+
+#icon p{
+    display: inline;
+    margin-right: 10px;
+}
+
+#profile{
+    text-align: center;
+    margin-right: 15px;
+}
+
+#like{
+    color: aliceblue;
+    text-decoration: none;
+}
+
+

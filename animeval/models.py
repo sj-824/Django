@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import BaseUserManager
-from django_mysql.models import ListCharField
+from django_mysql.models import ListCharField, ListTextField
 
 # Create your models here.
 
@@ -136,20 +136,17 @@ class AnimeModel(models.Model):
         max_length = (6 * 21),
         default = ['None']
     )
-    evaluation = ListCharField(
-        base_field = models.IntegerField(),
-        size = 5,
-        default = [0,0,0,0,0],
-    )
-    evaluation_ave = models.DecimalField(max_digits=2, decimal_places=1)
+
+    def __str__(self):
+        return self.title
 
 class ReviewModel(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     profile = models.ForeignKey(ProfileModel, on_delete = models.CASCADE)
-    anime_title = models.ForeignKey(AnimeModel, on_delete = models.CASCADE)
+    anime = models.ForeignKey(AnimeModel, on_delete = models.CASCADE)
     review_title = models.CharField(max_length =50)
     review_content = models.TextField()
-    evaluation = ListCharField(
+    evaluation = ListTextField(
         base_field = models.IntegerField(),
         size = 5,
         default = [0,0,0,0,0]
@@ -159,18 +156,18 @@ class ReviewModel(models.Model):
 
 class Counter(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    counter = ListCharField(
+    counter = ListTextField(
         base_field = models.IntegerField(),
         size = 8,
         default = [0,0,0,0,0,0,0,0]
     )
 
 class AccessReview(models.Model):
-    access_user = models.ForeignKey(User, on_delete = models.CASCADE)
-    access_review = models.ForeignKey(ReviewModel, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    review = models.ForeignKey(ReviewModel, on_delete = models.CASCADE)
 
     def __str__(self):
-        return 'アクセス名:{} / レビュータイトル:{}'.format(self.access_name.username, self.review.review_title)
+        return 'アクセス名:{} / レビュータイトル:{}'.format(self.user.username, self.review.review_title)
 
 class Comment(models.Model):
     comment = models.CharField(max_length = 255)
@@ -182,4 +179,10 @@ class ReplyComment(models.Model):
     reply = models.CharField(max_length = 255)
     comment = models.ForeignKey(Comment, on_delete = models.CASCADE)
     user = models.ForeignKey(User,on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add = True)
+
+class Like(models.Model):
+    review = models.ForeignKey(ReviewModel, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    like = models.IntegerField(default = 0)
     created_at = models.DateTimeField(auto_now_add = True)

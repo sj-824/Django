@@ -1,0 +1,28 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/css/homepage.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div id = 'wrapper'>
+        <section id = 'title'>
+            <h1></h1>
+        </section>
+        <div id = 'enter'>
+            <div id = 'enter-context'>
+                Press the Enter Key
+            </div>
+        </div>
+        <div id = 'login'>
+            <a href="{% url 'signup' %}"><h2>Sign up</h2></a>
+            <h2>or</h2>
+            <a href="{% url 'login' %}"><h2>Login</h2></a>
+        </div>
+    </div>
+<script src = "{% static '/javascript/homepage.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id = 'wrapper'>
+    <div id = 'comment-form'>
+        <div id = 'title'>
+            <h4>コメント</h4>
+        </div>
+        <form action="" method = 'POST'>{% csrf_token %}
+            <div id = 'reply'>
+                <textarea name="reply" cols="50" rows="5"></textarea>
+            </div>
+            <div id = 'button'>
+                <input type="submit" value = 'コメントする'>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

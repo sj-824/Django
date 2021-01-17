@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django import forms
 from . import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 #################User info.#######################
 class LoginForm(AuthenticationForm):
@@ -40,8 +41,8 @@ class CreateProfile(forms.Form):
 
         
 class CreateReview(forms.Form):
-    anime_title = forms.CharField(max_length = 100)
-    review = forms.TextField()
+    anime = forms.CharField(max_length = 100)
+    review = forms.CharField(max_length = 2000)
     eva_senario = forms.IntegerField(
         validators = [MinValueValidator(1),MaxValueValidator(5)]
     )

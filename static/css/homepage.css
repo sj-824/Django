@@ -1,0 +1,80 @@
+
+body{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.795);
+    margin: 0;
+}
+
+#title{
+    position: absolute;
+    color: aliceblue;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#enter{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: aliceblue;
+}
+
+
+
+#enter-context.is-show{
+    visibility: visible;
+    color: aliceblue;
+}
+
+#login{
+    position: absolute;
+    color: aliceblue;
+    display: flex;
+    top: 80%;
+    left: 49%;
+    transform: translate(-50%,-20%);
+    opacity: 0;
+    transition: all 3s;
+}
+
+#login.show{
+    opacity: 1;
+    transform: translate(-50%,-50%)
+}
+
+#login h2{
+    margin: 20px;
+}
+
+#login a{
+    text-decoration: none;
+    color: aliceblue;
+    transition: .3s;
+    transform: scale(1);
+    background-color: rgb(148, 148, 156);
+    border-radius: 50%;
+}
+
+#login a:hover{
+    color: aliceblue;
+    transform: scale(1.1);
+}
+#title h1::after{
+    content: '_';
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes blink {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

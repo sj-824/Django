@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %} 
+{%block content%}
+    <link rel="stylesheet" href="{% static '/css/post.css' %}">
+    <div id = 'wrapper'>
+        <div id = 'review'>
+            <section id = 'title'>
+                <h4>{{context}}</h4>
+                <h4>レビューを書いてみよう</h4>
+            </section> 
+            
+            <section id = 'item'>
+                <form action="" method = 'POST'>{% csrf_token %}
+                    <div>
+                        <p>アニメタイトル</p>
+                        <p>{{ object.anime_title.anime_title }}</p>
+                    </div>
+                    <div id = 'anime_genre'>
+                        <p>ジャンル</p>
+                        <p>
+                            SF<input type="radio" value = '1' name = 'anime_genre'>
+                            ファンタジー<input type="radio" value = '2' name = 'anime_genre'>
+                            コメディ<input type="radio" value = '3' name = 'anime_genre'>
+                            バトル<input type="radio" value = '4' name = 'anime_genre'>
+                            恋愛<input type="radio" value = '5' name = 'anime_genre'>
+                            スポーツ<input type="radio" value = '6' name = 'anime_genre'>
+                            青春<input type="radio" value = '7' name = 'anime_genre'>
+                            戦争<input type="radio" value = '8' name = 'anime_genre'>
+                        </p>
+                    </div>
+                    <div id = 'spoiler-question'>
+                        <p>ネタバレを含みますか？</p>
+                        <p>
+                            No<input type="radio" value = '0' name = 'spoiler' checked = 'checked'>
+                            Yes<input type="radio" value = '1' name = 'spoiler'>
+                        </p>
+                    </div>
+                    <div id = 'review-content'>
+                        <p>レビュー(1行目はタイトルを記入してください)</p>
+                        <textarea name="review_content" id="" cols="50" rows="10">{{review_title}}{{object.review_content | linebreaksbr}}</textarea>
+                    </div>
+                    <div id = 'evaluation-title'>
+                        <p>各項目の評価</p>
+                    </div>
+                    <div id='evaluation'>
+                        <div>
+                        <p>ストーリー</p>
+                            <select name="val1">
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                            </select>
+                        </div>
+                        <div>
+                        <p>作画</p>
+                            <select name="val2">
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                            </select>
+                        </div>
+                        <div>
+                        <p>音楽</p>
+                            <select name="val3">
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                            </select>
+                        </div>
+                        <div>
+                        <p>キャラクター</p>
+                            <select name="val4">
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                            </select>
+                        </div>
+                        <div>
+                        <p>声優</p>
+                            <select name="val5">
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id = 'button'>
+                        <input type="submit" value = '登録' name = 'post'>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+    
+    <script>
+        const list = [
+            {% for anime in anime_title_list %}
+            "{{anime}}",
+            {% endfor %}
+        ];
+        
+        function inputCheck(){
+            render();
+            const nameList = []
+            let elInput = document.getElementById('anime-title').value;
+            let elIn = document.getElementById('search');
+            list.forEach( (item) => {
+                if (elInput !== ''){
+                    if (item.indexOf(elInput) !== -1) {
+                        nameList.push(item);
+                    }
+                }
+            });
+            nameList.forEach((item) => {
+                const newEl = document.createElement('li');
+                let newCtx = document.createTextNode(item);
+                newEl.appendChild(newCtx);
+                newEl.setAttribute('class','anime-list');
+                elIn.appendChild(newEl);
+            })
+            clickEvent();
+        }
+
+        let render = () => {
+            const animeList = document.getElementById('search');
+            animeList.innerHTML = '';
+        }    
+
+        let clickEvent = () => {
+            document.getElementById('search').addEventListener('click', (e) => {
+                console.log(e.target);
+                document.getElementById('anime-title').value = e.target.textContent;
+                render();
+            })
+        }
+        </script>
+{%endblock content%}

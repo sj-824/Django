@@ -36,14 +36,23 @@ class AnimeModelAdmin(admin.ModelAdmin):
                 csvfile = io.TextIOWrapper(form.cleaned_data['file'], encoding = 'utf-8')
                 reader = csv.reader(csvfile)
 
+                animes = []
                 for row_data in reader:
-                    anime, created = AnimeModel.objects.get_or_create(anime_title = row_data[0])
-                    anime.started = row_data[1]
-                    anime.anime_genre = row_data[2]
-                    anime.corporation = row_data[3]
-                    anime.character_voice = row_data[4]
-                    anime.save()
-                
+                    title = row_data[0]
+                    started = row_data[1]
+                    genre = row_data[2]
+                    corp = row_data[3]
+                    cv = row_data[4]
+                    anime = AnimeModel(
+                        title = title,
+                        started = started,
+                        genre = genre,
+                        corporation = corp,
+                        character_voice = cv
+                    )
+                    animes.append(anime)
+                AnimeModel.objects.bulk_create(animes)
+
                 return redirect('admin:add_page')
             
         else:

@@ -1,0 +1,26 @@
+
+.item{
+    margin-bottom: 20px;
+}
+
+#gender{
+    width: 200px;
+}
+
+.form{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    justify-content: space-between;
+}
+
+#gender ul li input{
+    position: relative;
+    left: 6px;
+    text-align: center;
+
+}
+
+.form option{
+    border: 3px solid black;
+}
