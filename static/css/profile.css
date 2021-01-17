@@ -1,0 +1,173 @@
+
+#profile{
+    display: flex;
+
+}
+
+#section1{
+    width: 30%;
+}
+
+
+
+#top{
+    position: relative;
+    width: 200px;
+    height:150px;
+    left: 195px;
+    transform: translate(-50%);
+    text-align: center;
+}
+
+#data{
+    border: solid 3px aliceblue;
+    position: relative;
+    width: 390px;
+    height: 350px;
+}
+#count{
+    width: 384px;
+    position: absolute;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+#count li {
+    list-style: inside;
+    list-style: none;
+    border: #f0f8ff;
+    overflow: hidden;
+    color:#f0f8ff;
+    width: 193.5px;
+    height: 120px;
+    margin: 2px;
+    text-align: center;
+}
+
+#count li p{
+    margin-bottom: 10px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: #f0f8ff solid 1px;
+}
+
+#update{
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%,0%);
+    border: aliceblue solid 1px;
+    width: 80%;
+    text-align: center;
+    background-color: rgb(24, 23, 23);
+}
+
+#section2{
+    width: 60%;
+    position: relative;
+    left: 10%;
+    height: 500px;
+    border: white 3px solid;
+}
+
+#title{
+    padding-top: 7px;
+    display: flex;
+    background-color: rgba(0, 1, 70, 0.5);
+    border: solid white;
+    border-width: 0 0 3px 0;
+    color: white;
+    position: relative;
+    height: 60px;
+    
+}
+
+#search_box{
+    position:absolute;
+    right: 20px;
+    padding-bottom: 10px;
+    align-items: center;
+}
+
+.search_container{
+    box-sizing: border-box;
+    position: relative;
+    border: 2px solid #999;
+    display: block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    height: 2.3em;
+    width: 260px;
+    overflow: hidden;
+}
+.search_container input[type="text"]{
+    border: none;
+    height: 2.0em;
+    opacity: 1;
+    background-color: transparent;
+    color: aliceblue;
+}
+.search_container input[type="text"]:focus {
+    outline: 0;
+}
+
+#title_post{
+    margin-left: 20px;
+    height: 30px;
+    align-items: center;
+}
+
+#context {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,0%);
+}
+
+.form-inline{
+    margin: 0;
+    padding: 0;
+    bottom: -8px;
+}
+
+#review-list{
+    height: 470px;
+    overflow-y: scroll;
+}
+
+#review{
+    position: relative;
+    padding: 20px;
+    border : solid gray;
+    border-width: 0 0 1px 0;
+}
+
+#review-title{
+    display: flex;
+}
+
+#review-title h4{
+    margin-right: 20px;
+}
+
+#icon{
+    position: absolute;
+    right: 10px;bottom: 0px;
+}
+
+#icon p{
+    display: inline;
+    margin-right: 10px;
+}
+
+#update-delete{
+    position: absolute;
+    left: 10px;
+    bottom: 0;
+}
+
+#update-delete a{
+    margin-left: 5px;
+}

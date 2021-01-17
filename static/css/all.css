@@ -1,0 +1,85 @@
+
+nav{
+    background: -webkit-linear-gradient(90deg, rgb(64, 82, 115), rgb(57, 89, 83));
+    background: linear-gradient(90deg, rgb(64, 82, 115), rgb(57, 89, 83));
+    height: 50px;
+    z-index: 0;
+}
+
+body{
+    background-color: rgb(61, 61, 61);
+    color: aliceblue;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(79, 99, 190);
+}
+
+a:hover{
+    color: rgb(219, 124, 124);
+}
+
+textarea{
+    background-color: #838383
+    ;
+    color: aliceblue;
+}
+
+#avator{
+    border: 5px solid rgb(31, 31, 31);
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+}
+
+#navbarSupportedContent{
+    position: relative;
+}
+
+.nav-items{
+    margin-right: 20px;
+    border-radius: 50%;
+    color: aliceblue;
+    height: 100%;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.search_container{
+    box-sizing: border-box;
+    position: relative;
+    border: 2px solid #999;
+    display: block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    height: 2.3em;
+    width: 260px;
+    overflow: hidden;
+}
+.search_container input[type="text"]{
+    border: none;
+    height: 2.0em;
+    opacity: 1;
+    background-color: transparent;
+    color: aliceblue;
+}
+.search_container input[type="text"]:focus {
+    outline: 0;
+}
+
+
+#post{
+    position: absolute;
+    right: 20px;
+    height: 40px;
+    width: 60px;
+}
+
+#logout{
+    position: absolute;
+    right: 100px;
+    height: 40px;
+    width: 80px;    
+}
